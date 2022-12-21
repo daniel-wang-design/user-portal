@@ -7,13 +7,13 @@ export default class Navbar extends Component {
     return (
       <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
         <Link to="/" className="navbar-brand">
-          User Portal
+          FOCUS Youth Tutoring User Portal
         </Link>
         <div className="navbar-collapse">
           <ul className="navbar-nav mr-auto">
             <li className="navbar-item">
-              <Link to="/" className="nav-link">
-                Users List
+              <Link to="/list" className="nav-link">
+                Tutor List
               </Link>
             </li>
             <li className="navbar-item">
@@ -22,8 +22,8 @@ export default class Navbar extends Component {
               </Link>
             </li>
             <li className="navbar-item">
-              <Link to="/edit/:id" className="nav-link">
-                Update User
+              <Link to="/" className="nav-link">
+                My schedule
               </Link>
             </li>
           </ul>

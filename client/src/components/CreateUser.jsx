@@ -32,6 +32,7 @@ export default class CreateUser extends Component {
 
     const user = {
       name: this.state.name,
+      role: this.state.role,
     };
     console.log(user);
 

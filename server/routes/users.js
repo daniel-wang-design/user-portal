@@ -9,7 +9,10 @@ router.route("/").get((req, res) => {
 
 router.route("/add").post((req, res) => {
   const name = req.body.name;
-  const newUser = new User({ name });
+  const role = req.body.role;
+  const email = req.body.email;
+  const password = req.body.password;
+  const newUser = new User({ name, role, email, password });
   newUser
     .save()
     .then(() => res.json("User " + name + " added!"))
@@ -26,6 +29,9 @@ router.route("/update/:id").post((req, res) => {
   User.findById(req.params.id)
     .then((user) => {
       user.name = req.body.name;
+      user.role = req.body.role;
+      user.email = req.body.email;
+      user.password = req.body.password;
       user
         .save()
         .then(() => res.json("User updated!"))
