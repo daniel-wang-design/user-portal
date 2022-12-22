@@ -36,6 +36,3 @@
     transform: rotate(360deg);
   }
 }
-body {
-  overflow: hidden; /* Hide scrollbars */
-}

@@ -8,12 +8,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      unique: false,
     },
     role: {
       type: String,
       required: true,
-      unique: false,
       trim: true,
     },
     email: {
@@ -24,7 +22,6 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      unique: false,
       required: true,
     },
   },
