@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Login.css";
 import axios from "axios";
+import { useSignIn } from "react-auth-kit";
 
 const Login = () => {
   const [authMode, setAuthMode] = useState("signin");
@@ -13,7 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [successfulCreate, setSuccessfulCreate] = useState(false);
   const [succesLogin, setSuccessLogin] = useState("none");
-
+  const signIn = useSignIn();
   const changeAuthMode = () => {
     setValidEmail(true);
     setValidName(true);
@@ -21,7 +22,7 @@ const Login = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin");
   };
 
-  const handleSubmitSignIn = (e) => {
+  const handleSubmitSignIn = async (e) => {
     e.preventDefault();
     const validRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -41,23 +42,23 @@ const Login = () => {
     };
     console.log(user);
     setLoading(true);
-    validateUser(user);
-  };
-  async function validateUser(user) {
-    await axios
-      .post("http://localhost:5000/login/", user)
-      .then((res) => {
-        if (res.status === 200) {
-          setSuccessLogin("good");
-        }
-      })
-      .catch((err) => {
-        if (err.response.status !== 200) {
-          setSuccessLogin("bad");
-        }
+    try {
+      const response = await axios.post("http://localhost:5000/login/", user);
+      setSuccessLogin("good");
+      console.log(response.data);
+      signIn({
+        token: response.data.token,
+        expiresIn: 60,
+        tokenType: "Bearer",
+        authState: response.data.objectID,
       });
+      console.log(response.data.objectID);
+    } catch (e) {
+      setSuccessLogin("bad");
+    }
     setLoading(false);
-  }
+    window.location.href = "/";
+  };
 
   const handleSubmitRegister = (e) => {
     e.preventDefault();
@@ -97,6 +98,7 @@ const Login = () => {
       })
       .catch((err) => setSuccessfulCreate(true));
     console.log(user);
+    window.location.href = "/login";
   };
 
   if (authMode === "signin") {

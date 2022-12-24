@@ -22,7 +22,7 @@ router.route("/").post(async (req, res) => {
     },
     process.env.JWT_SECRET
   );
-  res.status(200).json({ token: jwtToken });
+  res.status(200).json({ token: jwtToken, objectID: userWithEmail._id });
 });
 
 module.exports = router;

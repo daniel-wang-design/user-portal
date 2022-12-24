@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import "./CreateUser.css";
+import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
+import Cookies from "js-cookie";
 
 const CreateUser = () => {
   const [name, setName] = useState("");
@@ -11,6 +13,24 @@ const CreateUser = () => {
   const [showUser, setShowUser] = useState(false);
   const [failed, setFailed] = useState(false);
   const [role, setRole] = useState("Student");
+  const [permissions, setPermissions] = useState(false);
+
+  useEffect(() => {
+    const raw = Cookies.get("auth_state").toString();
+    const length = raw.length;
+    const id = raw.substring(1, length - 1);
+    async function getUser() {
+      try {
+        const user = await axios.get("http://localhost:5000/users/" + id);
+        if (user.data.role === "Admin") {
+          setPermissions(true);
+        }
+      } catch (e) {
+        console.log("Something went wrong...");
+      }
+    }
+    getUser();
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -44,6 +64,15 @@ const CreateUser = () => {
     setShowUser(false);
     setFailed(false);
   };
+  if (!permissions) {
+    return (
+      <div>
+        <h1 className="text-danger mt-4 container">
+          You do not have permission to view this page.
+        </h1>
+      </div>
+    );
+  }
   return (
     <div className="container mt-4">
       <h3>Create New User</h3>

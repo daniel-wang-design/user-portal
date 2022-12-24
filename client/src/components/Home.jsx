@@ -4,7 +4,7 @@ import "./Home.css";
 const Home = () => {
   return (
     <div className="wrapper">
-      <div class="container">
+      <div className="container">
         <p>
           Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vivamus
           porta tortor sed metus. Nam pretium. Sed tempor. Integer ullamcorper,

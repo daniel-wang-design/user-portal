@@ -7,6 +7,7 @@ import UpdateUser from "./components/UpdateUser";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Schedule from "./components/Schedule";
+import { RequireAuth } from "react-auth-kit";
 
 function App() {
   return (
@@ -15,10 +16,38 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/schedule" element={<Schedule />} />
-        <Route path="/list" element={<UserList />} />
-        <Route path="/edit/:id" element={<UpdateUser />} />
-        <Route path="/create" element={<CreateUser />} />
+        <Route
+          path="/schedule"
+          element={
+            <RequireAuth loginPath="/login">
+              <Schedule />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/list"
+          element={
+            <RequireAuth loginPath="/login">
+              <UserList />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/edit/:id"
+          element={
+            <RequireAuth loginPath="/login">
+              <UpdateUser />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/create"
+          element={
+            <RequireAuth loginPath="/login">
+              <CreateUser />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </div>
   );
