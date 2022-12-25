@@ -227,6 +227,7 @@ const Login = () => {
             >
               <option value="Student">Student</option>
               <option value="Tutor">Tutor</option>
+              <option value="Executive">Executive</option>
             </select>
           </div>
           <div className="d-grid gap-2 mt-3">

@@ -46,4 +46,10 @@ router.route("/delete/:id").delete((req, res) => {
     .catch((err) => res.status(400).json("Error " + err));
 });
 
+router.route("/findByEmail/:email").get((req, res) => {
+  User.findOne({ email: req.params.email })
+    .then((user) => res.json(user))
+    .catch((err) => res.status(400).json("Error " + err));
+});
+
 module.exports = router;

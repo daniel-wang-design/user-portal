@@ -32,7 +32,7 @@ const CreateUser = () => {
     getUser();
   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setRole(document.getElementById("role-select").value);
     const user = {
@@ -42,7 +42,7 @@ const CreateUser = () => {
       password: password,
     };
     console.log(user);
-    axios
+    await axios
       .post("http://localhost:5000/users/add", user)
       .then((res) => {
         if (res.status === 200) {
@@ -56,6 +56,21 @@ const CreateUser = () => {
           setFailed(true);
         }
       });
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/users/findByEmail/" + email
+      );
+      console.log(response.data._id);
+      axios
+        .post("http://localhost:5000/volunteer/add", {
+          userID: response.data._id,
+          volunteerRecord: [],
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    } catch (e) {
+      console.log(e.message);
+    }
   };
   const reset = () => {
     setName("");
@@ -113,6 +128,7 @@ const CreateUser = () => {
           >
             <option value="Student">Student</option>
             <option value="Tutor">Tutor</option>
+            <option value="Executive">Executive</option>
             <option value="Admin">Admin</option>
           </select>
         </div>

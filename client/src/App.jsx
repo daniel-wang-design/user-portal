@@ -6,7 +6,10 @@ import UserList from "./components/UserList";
 import UpdateUser from "./components/UpdateUser";
 import Login from "./components/Login";
 import Home from "./components/Home";
-import Schedule from "./components/Schedule";
+import Hours from "./components/Hours";
+import UpdateVolunteerHour from "./components/UpdateVolunteerHour";
+import CreateNewVolunteer from "./components/CreateNewVolunteer";
+import AdminHours from "./components/AdminHours";
 import { RequireAuth } from "react-auth-kit";
 
 function App() {
@@ -14,13 +17,28 @@ function App() {
     <div>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
         <Route
-          path="/schedule"
+          path="/"
           element={
             <RequireAuth loginPath="/login">
-              <Schedule />
+              <Home />
+            </RequireAuth>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/hours"
+          element={
+            <RequireAuth loginPath="/login">
+              <Hours />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/hours/:id"
+          element={
+            <RequireAuth loginPath="/login">
+              <AdminHours />
             </RequireAuth>
           }
         />
@@ -45,6 +63,22 @@ function App() {
           element={
             <RequireAuth loginPath="/login">
               <CreateUser />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/newVolunteer"
+          element={
+            <RequireAuth loginPath="/login">
+              <CreateNewVolunteer />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/updateVolunteer/:id"
+          element={
+            <RequireAuth loginPath="/login">
+              <UpdateVolunteerHour />
             </RequireAuth>
           }
         />

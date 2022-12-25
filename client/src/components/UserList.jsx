@@ -38,7 +38,7 @@ const UserList = () => {
     async function getUsers() {
       try {
         const user = await axios.get("http://localhost:5000/users/" + id);
-        setPermissions(false)
+        setPermissions(false);
         if (user.data.role === "Admin") {
           setPermissions(true);
         }
@@ -65,6 +65,7 @@ const UserList = () => {
         <td>{user.email}</td>
         <td>{user.role}</td>
         <td hidden={!permissions}>
+          <Link to={"/hours/" + user._id}>view hours</Link> |{" "}
           <Link to={"/edit/" + user._id}>edit</Link> |{" "}
           <Link onClick={() => deleteUser(user._id)}>delete</Link>
         </td>

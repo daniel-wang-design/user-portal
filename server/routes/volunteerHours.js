@@ -7,9 +7,12 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/:id").get((req, res) => {
-  VolunteerRecord.findById(req.params.id)
-    .then((list) => res.json(list))
+router.route("/get/:id").get((req, res) => {
+  const userID = req.params.id;
+  VolunteerRecord.findOne({ userID: userID })
+    .then((list) => {
+      res.json(list);
+    })
     .catch((err) => res.status(400).json("Error " + err));
 });
 
@@ -27,25 +30,84 @@ router.route("/add").post((req, res) => {
     .catch((err) => res.status(400).json("Error " + err));
 });
 
-router.route("/update").post((req, res) => {
-  const id = req.body.userID;
-  VolunteerRecord.findOne({ userID: id })
+router.route("/addItem").post((req, res) => {
+  const userID = req.body.userID;
+  const description = req.body.description;
+  const date = req.body.date;
+  const hours = req.body.hours;
+  const approvedBy = "x";
+  VolunteerRecord.updateOne(
+    { userID: userID },
+    {
+      $push: {
+        volunteerRecord: {
+          description: description,
+          date: date,
+          hours: hours,
+          approvedBy: approvedBy,
+        },
+      },
+    }
+  )
     .then((item) => {
-      item.userID = req.body.userID;
-      item.volunteerRecord = req.body.volunteerRecord;
-      item
-        .save()
-        .then(() => res.json("Added volunteer record!"))
-        .catch((err) => res.status(400).json("Error " + err));
+      res.json(item);
+    })
+    .catch((err) => res.status(400).json("Error " + err));
+});
+
+router.route("/edit").post((req, res) => {
+  const userID = req.body.userID;
+  const description = req.body.description;
+  const date = req.body.date;
+  const hours = req.body.hours;
+  const updatedID = req.body.updatedID;
+  const approvedBy = req.body.approvedBy;
+  VolunteerRecord.updateOne(
+    { userID: userID, "volunteerRecord._id": updatedID },
+    {
+      $set: {
+        "volunteerRecord.$.description": description,
+        "volunteerRecord.$.date": date,
+        "volunteerRecord.$.hours": hours,
+        "volunteerRecord.$.approvedBy": approvedBy,
+      },
+    }
+  )
+    .then((item) => {
+      res.json(item);
     })
     .catch((err) => res.status(400).json("Error " + err));
 });
 
 router.route("/delete").post((req, res) => {
-  const id = req.body.id;
-  VolunteerRecord.deleteOne({ userID: id })
+  const userID = req.body.userID;
+  const _id = req.body._id;
+
+  VolunteerRecord.updateOne(
+    { userID: userID },
+    {
+      $pull: { volunteerRecord: { _id: _id } },
+    },
+    {
+      new: true,
+    }
+  )
     .then((item) => {
       res.json(item);
+    })
+    .catch((err) => res.status(400).json("Error " + err));
+});
+
+router.route("/getItem/:userID/:_id").get((req, res) => {
+  const userID = req.params.userID;
+  const _id = req.params._id;
+  console.log(_id);
+  VolunteerRecord.findOne({ userID: userID })
+    .then((list) => {
+      const val = list.volunteerRecord.find(
+        (item) => item._id.toString() === _id
+      );
+      res.json(val);
     })
     .catch((err) => res.status(400).json("Error " + err));
 });
